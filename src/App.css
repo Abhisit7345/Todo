@@ -1,0 +1,45 @@
+.header {
+  text-align:center;
+  font-size: 50px;
+  min-height: 200px;
+  width : 400px;
+  background-color: rgb(0, 239, 0);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.main {
+  display : flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.plus {
+  font-size: 50px;
+  margin-top : 20px;
+}
+
+.remove {
+  color : red;
+  font-size: 30px;
+}
+
+.material-symbols-outlined:hover {
+  cursor : pointer;
+}
+
+.list-item {
+  padding: 20px;
+  background-color: orange;
+  margin: 20px 20px;
+  border-radius: 20px;
+}
+
+.form-modal {
+  padding : 20px;
+}
