@@ -53,6 +53,7 @@ function App() {
         .request(config)
         .then((response) => {
           console.log(JSON.stringify(response.data));
+          setItemList(response.data)
         })
         .catch((error) => {
           console.log(error);
@@ -105,7 +106,7 @@ function App() {
             {itemList.map((item, index) => (
               <div key={index} className="list-item">
                 <span>
-                  {index} {item}
+                  {index} {item.item}
                 </span>{" "}
                 <span
                   onClick={() => handleDelete(index)}
