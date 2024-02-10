@@ -19,16 +19,17 @@ app.use(express.json());
 app.use(cors());
 
 app.post('/addItem', (req, res) => {
-  const { item } = req.body;
-  console.log(req.body)
-  const sql = 'INSERT INTO myitems (item) VALUES (?)';
-  connection.query(sql, [item], (error, results) => {
+  const { item, category } = req.body;
+  const sql = 'INSERT INTO myitems (item, category) VALUES (?, ?)';
+  connection.query(sql, [item, category], (error, results) => {
     if (error) {
       console.error('Error inserting data:', error);
       res.status(500).json({ error: 'Error inserting data' });
     } else {
+      console.log(results)
       console.log('Data inserted successfully');
-      res.status(200).json({ message: 'Data inserted successfully' });
+      console.log(results.insertId)
+      res.status(200).json({ message: 'Data inserted successfully', itemId : results.insertId });
     }
   });
 });
@@ -43,6 +44,40 @@ app.get('/getAllItems', (req, res) => {
       console.log('Data fetched successfully');
       res.status(200).json(results);
       return results
+    }
+  });
+});
+
+app.delete('/deleteItem/:itemId', (req, res) => {
+  const itemId = req.params.itemId;
+  const sql = 'DELETE FROM myitems WHERE id = ?';
+  connection.query(sql, [itemId], (error, results) => {
+    if (error) {
+      console.error('Error deleting data:', error);
+      res.status(500).json({ error: 'Error deleting data' });
+    } else {
+      console.log('Data deleted successfully');
+      res.status(200).json({ message: 'Data deleted successfully' });
+    }
+  });
+});
+
+app.put('/updateItem/:itemId', (req, res) => {
+  const itemId = req.params.itemId;
+  const { newItem } = req.body;
+  const sql = 'UPDATE myitems SET item = ? WHERE id = ?';
+  connection.query(sql, [newItem, itemId], (error, results) => {
+    if (error) {
+      console.error('Error updating data:', error);
+      res.status(500).json({ error: 'Error updating data' });
+    } else {
+      if (results.affectedRows === 0) {
+        // If no rows were affected, it means there was no item with the given ID
+        res.status(404).json({ message: 'Item not found' });
+      } else {
+        console.log('Data updated successfully');
+        res.status(200).json({ message: 'Data updated successfully' });
+      }
     }
   });
 });

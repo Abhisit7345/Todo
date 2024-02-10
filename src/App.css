@@ -2,8 +2,8 @@
   text-align:center;
   font-size: 50px;
   min-height: 200px;
-  width : 400px;
-  background-color: rgb(0, 239, 0);
+  width : 80%;
+  background-color: rgb(255, 192, 98);
   border-radius: 20px;
   display: flex;
   flex-direction: column;
@@ -17,6 +17,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: rgb(225, 255, 245);
+  min-height: 100vh;
+  font-family: sans-serif;
 }
 
 .plus {
@@ -35,7 +38,7 @@
 
 .list-item {
   padding: 20px;
-  background-color: orange;
+  background-color: rgb(255, 227, 174);
   margin: 20px 20px;
   border-radius: 20px;
 }
@@ -43,3 +46,15 @@
 .form-modal {
   padding : 20px;
 }
+
+.category-item {
+  background-color: rgb(255, 238, 218);
+  border-radius: 20px;
+  margin-bottom: 50px;
+}
+
+.category-name {
+  text-align: left;
+  margin-left: 20px;
+}
+
