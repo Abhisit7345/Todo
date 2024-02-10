@@ -4,7 +4,12 @@ import axios from "axios";
 import { useState, useRef, useEffect } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faPenToSquare,
+  faCheck,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 
 import { Button, Modal, Form } from "react-bootstrap";
 
@@ -267,6 +272,7 @@ function App() {
                           </div>
                           <div
                             onClick={() => handleEditClick(item.id, index, key)}
+                            className="edit"
                           >
                             <FontAwesomeIcon icon={faPenToSquare} size="xs" />
                           </div>
@@ -288,12 +294,16 @@ function App() {
                             />
                           </Form.Group>
                         </Form>
-                        <div
-                          onClick={() => handleEditConfirm(item.id, index, key)}
-                        >
-                          change
+                        <div className="d-flex justify-content-center">
+                          <div onClick={() => handleEditConfirm(item.id, index, key)} className="confirm">
+                            {" "}
+                            <FontAwesomeIcon icon={faCheck} />
+                          </div>
+                          <div onClick={handleReturnDefault} className="cross">
+                            {" "}
+                            <FontAwesomeIcon icon={faXmark} />
+                          </div>
                         </div>
-                        <div onClick={handleReturnDefault}>go back</div>
                       </div>
                     )}
                   </div>

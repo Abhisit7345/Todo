@@ -67,3 +67,13 @@
   cursor: pointer;
   color: #ff3333;
 }
+
+.confirm,
+.edit,
+.cross:hover {
+  cursor: pointer;
+}
+
+.confirm {
+  margin-right : 40px;
+}
