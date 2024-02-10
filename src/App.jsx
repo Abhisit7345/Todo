@@ -10,14 +10,14 @@ function App() {
   const itemRef = useRef("");
 
   const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
+  const handleClose = () => setShow(false)
   const handleShow = () => setShow(true);
 
   function handleAdd() {
     let curItem = [...itemList];
     curItem.push(itemRef.current.value);
     setItemList(curItem);
+    handleSubmit(itemRef.current.value)
   }
 
   function handleDelete(index) {
@@ -28,13 +28,29 @@ function App() {
     setItemList(newArray);
   }
 
-  const handleSubmit = async () => {
-    try {
-      await axios.post("/additem", { item: "homework" });
-      console.log("Data inserted successfully");
-    } catch (error) {
-      console.error("Error inserting data:", error);
-    }
+  const handleSubmit = async (itemName) => {
+    let data = JSON.stringify({
+      item: itemName,
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://localhost:5000/additem",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    axios
+      .request(config)
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
@@ -53,7 +69,7 @@ function App() {
         .request(config)
         .then((response) => {
           console.log(JSON.stringify(response.data));
-          setItemList(response.data)
+          setItemList(response.data);
         })
         .catch((error) => {
           console.log(error);
@@ -126,7 +142,6 @@ function App() {
           className="material-symbols-outlined plus"
           onClick={() => {
             handleShow();
-            handleSubmit();
           }}
         >
           add_circle
