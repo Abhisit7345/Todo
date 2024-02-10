@@ -1,9 +1,9 @@
 .header {
-  text-align:center;
+  text-align: center;
   font-size: 50px;
   min-height: 200px;
-  width : 80%;
-  background-color: rgb(255, 192, 98);
+  width: 80%;
+  background-color: #c54b4b; 
   border-radius: 20px;
   display: flex;
   flex-direction: column;
@@ -13,42 +13,43 @@
 }
 
 .main {
-  display : flex;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: rgb(225, 255, 245);
+  background-color: #e7d5d5; 
   min-height: 100vh;
   font-family: sans-serif;
 }
 
 .plus {
   font-size: 50px;
-  margin-top : 20px;
+  margin-top: 20px;
+  color: #009933; 
 }
 
 .remove {
-  color : red;
+  color: #ff0000;
   font-size: 30px;
 }
 
 .material-symbols-outlined:hover {
-  cursor : pointer;
+  cursor: pointer;
 }
 
 .list-item {
   padding: 20px;
-  background-color: rgb(255, 227, 174);
+  background-color: #fff7f7;
   margin: 20px 20px;
   border-radius: 20px;
 }
 
 .form-modal {
-  padding : 20px;
+  padding: 20px;
 }
 
 .category-item {
-  background-color: rgb(255, 238, 218);
+  background-color: #f7dddd;
   border-radius: 20px;
   margin-bottom: 50px;
 }
@@ -58,3 +59,11 @@
   margin-left: 20px;
 }
 
+.trash {
+  margin-right: 10px;
+}
+
+.trash:hover {
+  cursor: pointer;
+  color: #ff3333;
+}

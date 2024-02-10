@@ -3,8 +3,8 @@ import axios from "axios";
 
 import { useState, useRef, useEffect } from "react";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 import { Button, Modal, Form } from "react-bootstrap";
 
@@ -16,14 +16,19 @@ function App() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [categoryShow, setCategoryShow] = useState(false);
+  const handleCategoryClose = () => setCategoryShow(false);
+  const handleCategoryShow = () => setCategoryShow(true);
+
   const [editIndex, setEditIndex] = useState(-1);
   const [textChange, setTextChange] = useState("");
   const [currentCategory, setCurrentCategory] = useState();
+  const newCategoryRef = useRef("");
 
-  async function handleDelete(index,category) {
+  async function handleDelete(index, category) {
     console.log(index);
-    let obj = {...itemList}
-    let objList = obj[category]
+    let obj = { ...itemList };
+    let objList = obj[category];
     let arrayIndex = 0;
     for (let i = 0; i < objList.length; i++) {
       if (objList[i].itemId == index) {
@@ -33,10 +38,10 @@ function App() {
     const leftArray = objList.slice(0, arrayIndex);
     const rightArray = objList.slice(arrayIndex + 1);
     const newArray = leftArray.concat(rightArray);
-    obj[category] = newArray
-    if(newArray.length == 0){
-      delete obj[category]
-    }
+    obj[category] = newArray;
+    //if (newArray.length == 0) {
+    //  delete obj[category];
+    //}
     setItemList(obj);
 
     let data = "";
@@ -59,9 +64,10 @@ function App() {
       });
   }
 
-  const handleSubmit = async (itemName,category) => {
+  const handleSubmit = async (itemName, category) => {
     let data = JSON.stringify({
-      item: itemName, category : category
+      item: itemName,
+      category: category,
     });
 
     let config = {
@@ -78,8 +84,12 @@ function App() {
       .request(config)
       .then((response) => {
         console.log(JSON.stringify(response.data));
-        let curItem = {...itemList};
-        curItem[currentCategory].push({ item: itemName, id: response.data.itemId, category: category });
+        let curItem = { ...itemList };
+        curItem[currentCategory].push({
+          item: itemName,
+          id: response.data.itemId,
+          category: category,
+        });
         setItemList(curItem);
       })
       .catch((error) => {
@@ -107,9 +117,9 @@ function App() {
       .then((response) => {
         console.log(JSON.stringify(response.data));
         setEditIndex(-1);
-        const newList = {...itemList};
+        const newList = { ...itemList };
         newList[category][arrayIndex].item = textChange;
-        setItemList(newList)
+        setItemList(newList);
       })
       .catch((error) => {
         console.log(error);
@@ -121,12 +131,14 @@ function App() {
     setTextChange(itemList[category][arrayIndex].item);
   }
 
-  function handleReturnDefault(){
-    setEditIndex(-1)
+  function handleReturnDefault() {
+    setEditIndex(-1);
   }
 
-  function handleAddCategory(){
-
+  function handleAddCategory() {
+    let obj = { ...itemList };
+    obj[newCategoryRef.current.value] = [];
+    setItemList(obj);
   }
 
   useEffect(() => {
@@ -192,7 +204,7 @@ function App() {
             variant="primary"
             onClick={() => {
               handleClose();
-              handleSubmit(itemRef.current.value,currentCategory);
+              handleSubmit(itemRef.current.value, currentCategory);
             }}
           >
             Add
@@ -200,32 +212,32 @@ function App() {
         </Modal.Footer>
       </Modal>
 
-      <Modal show={categoryShow} onHide={handleClose}>
+      <Modal show={categoryShow} onHide={handleCategoryClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add item for {currentCategory}</Modal.Title>
+          <Modal.Title>Add new category</Modal.Title>
         </Modal.Header>
         <div className="form-modal">
           <Form>
             <Form.Group className="mb-3" controlId="formitem">
-              <Form.Label>item name</Form.Label>
+              <Form.Label>category name</Form.Label>
               <Form.Control
                 type="text"
-                ref={itemRef}
-                placeholder="Enter item name"
+                ref={newCategoryRef}
+                placeholder="Enter category name"
               />
             </Form.Group>
           </Form>
         </div>
 
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button variant="secondary" onClick={handleCategoryClose}>
             Close
           </Button>
           <Button
             variant="primary"
             onClick={() => {
-              handleClose();
-              handleSubmit(itemRef.current.value,currentCategory);
+              handleCategoryClose();
+              handleAddCategory();
             }}
           >
             Add
@@ -234,43 +246,51 @@ function App() {
       </Modal>
 
       <div className="header">
-        <div style={{ fontSize : "70px" }}>Todo List</div>
+        <div style={{ fontSize: "70px" }}>Todo List</div>
         {Object.keys(itemList).length > 0 ? (
           <div>
             {Object.keys(itemList).map((key, index) => (
               <div key={index} className="category-item">
-                <div className="category-name">
-                  {key}
-                </div>
+                <div className="category-name">{key}</div>
 
                 {itemList[key].map((item, index) => (
                   <div key={item.itemId} className="list-item">
                     {editIndex !== item.id ? (
-                      <div className="d-flex flex-column">
-                        <div>
-                        {item.item}
+                      <div className="d-flex justify-content-between px-5">
+                        <div>{item.item}</div>
+                        <div className="d-flex">
+                          <div
+                            onClick={() => handleDelete(item.id, key)}
+                            className="trash"
+                          >
+                            <FontAwesomeIcon icon={faTrash} size="xs" />
+                          </div>
+                          <div
+                            onClick={() => handleEditClick(item.id, index, key)}
+                          >
+                            <FontAwesomeIcon icon={faPenToSquare} size="xs" />
+                          </div>
                         </div>
-                        <FontAwesomeIcon icon={faTrash} size="xs"/>
-                        <span
-                          onClick={() => handleDelete(item.id,key)}
-                          className="material-symbols-outlined remove"
-                        >
-                          remove
-                        </span>
-                        <span onClick={() => handleEditClick(item.id, index, key)}>
-                          edit
-                        </span>
                       </div>
                     ) : (
                       <div>
-                        <input
-                          type="text"
-                          defaultValue={textChange}
-                          onChange={(e) => {
-                            setTextChange(e.target.value);
-                          }}
-                        />
-                        <div onClick={() => handleEditConfirm(item.id, index, key)}>
+                        <Form>
+                          <Form.Group
+                            className="mb-3"
+                            controlId="formBasicEmail"
+                          >
+                            <Form.Control
+                              type="text"
+                              defaultValue={textChange}
+                              onChange={(e) => {
+                                setTextChange(e.target.value);
+                              }}
+                            />
+                          </Form.Group>
+                        </Form>
+                        <div
+                          onClick={() => handleEditConfirm(item.id, index, key)}
+                        >
                           change
                         </div>
                         <div onClick={handleReturnDefault}>go back</div>
@@ -294,7 +314,9 @@ function App() {
           <div>No items.. go find something to do</div>
         )}
         <div>
-        <Button variant="secondary" onClick={handleAddCategory}>Add Category</Button>{' '}
+          <Button variant="secondary" onClick={handleCategoryShow}>
+            Add Category
+          </Button>{" "}
         </div>
       </div>
     </div>
