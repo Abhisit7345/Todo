@@ -133,9 +133,10 @@ function App() {
       });
   }
 
-  function handleEditClick(index, categoryIndex, itemIndex) {
+  function handleEditClick(index, categoryName, itemIndex) {
+    console.log(itemList[categoryName])
     setEditIndex(index);
-    setTextChange(itemList[categoryIndex][itemIndex].item);
+    setTextChange(itemList[categoryName][itemIndex].item);
   }
 
   function handleReturnDefault() {
@@ -273,7 +274,7 @@ function App() {
                             <FontAwesomeIcon icon={faTrash} size="xs" />
                           </div>
                           <div
-                            onClick={() => handleEditClick(item.id, categoryIndex, itemIndex)}
+                            onClick={() => handleEditClick(item.id, categoryName, itemIndex)}
                             className="edit"
                           >
                             <FontAwesomeIcon icon={faPenToSquare} size="xs" />
@@ -297,7 +298,7 @@ function App() {
                           </Form.Group>
                         </Form>
                         <div className="d-flex justify-content-center">
-                          <div onClick={() => handleEditConfirm(item.id, categoryIndex, itemIndex)} className="confirm">
+                          <div onClick={() => handleEditConfirm(item.id, categoryName, itemIndex)} className="confirm">
                             {" "}
                             <FontAwesomeIcon icon={faCheck} />
                           </div>
