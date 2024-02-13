@@ -30,20 +30,22 @@ function App() {
   const [currentCategory, setCurrentCategory] = useState();
   const newCategoryRef = useRef("");
 
-  async function handleDelete(index, category) {
-    console.log(index);
+  async function handleDelete(itemId, categoryName) {
+    console.log(itemId,categoryName)
+    console.log(itemList)
     let obj = { ...itemList };
-    let objList = obj[category];
+    let objList = obj[categoryName];
     let arrayIndex = 0;
     for (let i = 0; i < objList.length; i++) {
-      if (objList[i].itemId == index) {
+      if (objList[i].id == itemId) {
         arrayIndex = i;
       }
     }
+    console.log(objList,arrayIndex)
     const leftArray = objList.slice(0, arrayIndex);
     const rightArray = objList.slice(arrayIndex + 1);
     const newArray = leftArray.concat(rightArray);
-    obj[category] = newArray;
+    obj[categoryName] = newArray;
     //if (newArray.length == 0) {
     //  delete obj[category];
     //}
@@ -54,7 +56,7 @@ function App() {
     let config = {
       method: "delete",
       maxBodyLength: Infinity,
-      url: `http://localhost:5000/deleteItem/${index}`,
+      url: `http://localhost:5000/deleteItem/${itemId}`,
       headers: {},
       data: data,
     };
@@ -102,7 +104,7 @@ function App() {
       });
   };
 
-  function handleEditConfirm(itemId, arrayIndex, category) {
+  function handleEditConfirm(itemId, categoryIndex, itemIndex) {
     let data = JSON.stringify({
       newItem: textChange,
     });
@@ -123,7 +125,7 @@ function App() {
         console.log(JSON.stringify(response.data));
         setEditIndex(-1);
         const newList = { ...itemList };
-        newList[category][arrayIndex].item = textChange;
+        newList[categoryIndex][itemIndex].item = textChange;
         setItemList(newList);
       })
       .catch((error) => {
@@ -131,9 +133,9 @@ function App() {
       });
   }
 
-  function handleEditClick(index, arrayIndex, category) {
+  function handleEditClick(index, categoryIndex, itemIndex) {
     setEditIndex(index);
-    setTextChange(itemList[category][arrayIndex].item);
+    setTextChange(itemList[categoryIndex][itemIndex].item);
   }
 
   function handleReturnDefault() {
@@ -254,24 +256,24 @@ function App() {
         <div style={{ fontSize: "70px" }}>Todo List</div>
         {Object.keys(itemList).length > 0 ? (
           <div>
-            {Object.keys(itemList).map((key, index) => (
-              <div key={index} className="category-item">
-                <div className="category-name">{key}</div>
+            {Object.keys(itemList).map((categoryName, categoryIndex) => (
+              <div key={categoryIndex} className="category-item">
+                <div className="category-name">{categoryName}</div>
 
-                {itemList[key].map((item, index) => (
-                  <div key={item.itemId} className="list-item">
+                {itemList[categoryName].map((item, itemIndex) => (
+                  <div key={item.id} className="list-item">
                     {editIndex !== item.id ? (
                       <div className="d-flex justify-content-between px-5">
-                        <div>{item.item}</div>
+                        <div>{item.id}{item.item}</div>
                         <div className="d-flex">
                           <div
-                            onClick={() => handleDelete(item.id, key)}
+                            onClick={() => handleDelete(item.id, categoryName)}
                             className="trash"
                           >
                             <FontAwesomeIcon icon={faTrash} size="xs" />
                           </div>
                           <div
-                            onClick={() => handleEditClick(item.id, index, key)}
+                            onClick={() => handleEditClick(item.id, categoryIndex, itemIndex)}
                             className="edit"
                           >
                             <FontAwesomeIcon icon={faPenToSquare} size="xs" />
@@ -295,7 +297,7 @@ function App() {
                           </Form.Group>
                         </Form>
                         <div className="d-flex justify-content-center">
-                          <div onClick={() => handleEditConfirm(item.id, index, key)} className="confirm">
+                          <div onClick={() => handleEditConfirm(item.id, categoryIndex, itemIndex)} className="confirm">
                             {" "}
                             <FontAwesomeIcon icon={faCheck} />
                           </div>
@@ -312,7 +314,7 @@ function App() {
                   className="material-symbols-outlined plus"
                   onClick={() => {
                     handleShow();
-                    setCurrentCategory(key);
+                    setCurrentCategory(categoryName);
                   }}
                 >
                   add_circle
