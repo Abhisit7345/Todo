@@ -192,7 +192,7 @@ function App() {
           <Modal.Title>Add item for {currentCategory}</Modal.Title>
         </Modal.Header>
         <div className="form-modal">
-          <Form>
+          <Form autoComplete="off">
             <Form.Group className="mb-3" controlId="formitem">
               <Form.Label>item name</Form.Label>
               <Form.Control
@@ -225,7 +225,7 @@ function App() {
           <Modal.Title>Add new category</Modal.Title>
         </Modal.Header>
         <div className="form-modal">
-          <Form>
+          <Form autoComplete="off">
             <Form.Group className="mb-3" controlId="formitem">
               <Form.Label>category name</Form.Label>
               <Form.Control
@@ -283,7 +283,7 @@ function App() {
                       </div>
                     ) : (
                       <div>
-                        <Form>
+                        <Form autoComplete="off">
                           <Form.Group
                             className="mb-3"
                             controlId="formBasicEmail"
